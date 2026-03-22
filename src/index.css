@@ -24,7 +24,7 @@ html {
 }
 
 body {
-  @apply bg-gradient-to-br from-neutral-50 via-primary-100 to-neutral-100 text-[rgb(var(--foreground))] font-sans min-h-screen;
+  @apply bg-neutral-50 text-[rgb(var(--foreground))] font-sans min-h-screen;
 }
 
 input, textarea, select {
