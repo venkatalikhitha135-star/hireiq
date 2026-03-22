@@ -24,7 +24,7 @@ html {
 }
 
 body {
-  @apply bg-[rgb(var(--background))] text-[rgb(var(--foreground))] font-sans;
+  @apply bg-gradient-to-br from-neutral-50 via-primary-100 to-neutral-100 text-[rgb(var(--foreground))] font-sans min-h-screen;
 }
 
 input, textarea, select {
@@ -33,4 +33,27 @@ input, textarea, select {
 
 button {
   @apply cursor-pointer;
+}
+
+/* Smooth transitions */
+button, a, input, [role="button"] {
+  @apply transition-all duration-200;
+}
+
+input:focus {
+  @apply outline-none;
+}
+
+/* Loading spinner */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spinner {
+  animation: spin 1s linear infinite;
 }

@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { LogOut, Users, BarChart3, Calendar } from 'lucide-react'
+import { LogOut, Users, TrendingUp, Clock, UserCheck } from 'lucide-react'
 
 export default function HRDashboard() {
   const navigate = useNavigate()
@@ -8,20 +8,31 @@ export default function HRDashboard() {
     navigate('/')
   }
 
+  const recentActivity = [
+    { user: 'John Smith', action: 'Accepted offer', time: '2 hours ago', status: 'accepted' },
+    { user: 'Sarah Johnson', action: 'Viewed offer', time: '4 hours ago', status: 'viewed' },
+    { user: 'Mike Davis', action: 'Declined offer', time: '6 hours ago', status: 'declined' },
+    { user: 'Emily Wilson', action: 'Pending response', time: '8 hours ago', status: 'pending' },
+  ]
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <div className="min-h-screen w-full">
       {/* Header */}
-      <header className="bg-white border-b border-slate-200 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex items-center justify-between">
+      <header className="bg-white border-b border-neutral-200 sticky top-0 z-10 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900">HR Dashboard</h1>
-            <p className="text-slate-600 text-sm mt-1">Welcome back, HR Manager</p>
+            <h1 className="font-display text-2xl font-bold text-neutral-900">
+              HR Dashboard
+            </h1>
+            <p className="text-neutral-600 text-sm">
+              Manage offers and employee engagement
+            </p>
           </div>
           <button
             onClick={handleLogout}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 font-medium transition-colors duration-200 border border-red-200"
+            className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors font-medium"
           >
-            <LogOut className="w-4 h-4" />
+            <LogOut className="w-4 h-4" strokeWidth={1.5} />
             Logout
           </button>
         </div>
@@ -30,42 +41,65 @@ export default function HRDashboard() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Stats Grid */}
-        <div className="grid md:grid-cols-3 gap-6 mb-8">
-          {[
-            { icon: Users, label: 'Total Employees', value: '284', color: 'from-indigo-500 to-indigo-600' },
-            { icon: BarChart3, label: 'Active Offers', value: '42', color: 'from-blue-500 to-blue-600' },
-            { icon: Calendar, label: 'Pending Reviews', value: '18', color: 'from-purple-500 to-purple-600' },
-          ].map((stat, idx) => {
-            const Icon = stat.icon
-            return (
-              <div key={idx} className="bg-white rounded-2xl p-6 shadow-lg border border-slate-100">
-                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center mb-4`}>
-                  <Icon className="w-6 h-6 text-white" />
-                </div>
-                <p className="text-slate-600 text-sm font-medium">{stat.label}</p>
-                <p className="text-3xl font-bold text-slate-900 mt-1">{stat.value}</p>
-              </div>
-            )
-          })}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <div className="bg-white rounded-lg p-4 border border-neutral-200">
+            <div className="flex items-center gap-3 mb-2">
+              <Users className="w-5 h-5 text-primary-600" strokeWidth={1.5} />
+              <p className="text-neutral-600 text-xs font-medium">Total Employees</p>
+            </div>
+            <p className="font-display text-2xl font-bold text-neutral-900">284</p>
+          </div>
+          <div className="bg-white rounded-lg p-4 border border-neutral-200">
+            <div className="flex items-center gap-3 mb-2">
+              <TrendingUp className="w-5 h-5 text-primary-600" strokeWidth={1.5} />
+              <p className="text-neutral-600 text-xs font-medium">Active Offers</p>
+            </div>
+            <p className="font-display text-2xl font-bold text-neutral-900">42</p>
+          </div>
+          <div className="bg-white rounded-lg p-4 border border-neutral-200">
+            <div className="flex items-center gap-3 mb-2">
+              <Clock className="w-5 h-5 text-primary-600" strokeWidth={1.5} />
+              <p className="text-neutral-600 text-xs font-medium">Pending</p>
+            </div>
+            <p className="font-display text-2xl font-bold text-yellow-600">18</p>
+          </div>
+          <div className="bg-white rounded-lg p-4 border border-neutral-200">
+            <div className="flex items-center gap-3 mb-2">
+              <UserCheck className="w-5 h-5 text-primary-600" strokeWidth={1.5} />
+              <p className="text-neutral-600 text-xs font-medium">Accepted</p>
+            </div>
+            <p className="font-display text-2xl font-bold text-green-600">28</p>
+          </div>
         </div>
 
         {/* Content Area */}
-        <div className="bg-white rounded-2xl p-8 shadow-lg border border-slate-100">
-          <h2 className="text-xl font-bold text-slate-900 mb-6">Recent Activity</h2>
-          <div className="space-y-4">
-            {[
-              { user: 'John Smith', action: 'Viewed offer', time: '2 hours ago' },
-              { user: 'Sarah Johnson', action: 'Accepted offer', time: '4 hours ago' },
-              { user: 'Mike Davis', action: 'Declined offer', time: '6 hours ago' },
-            ].map((activity, idx) => (
-              <div key={idx} className="flex items-center justify-between p-4 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors">
-                <div>
-                  <p className="font-semibold text-slate-900">{activity.user}</p>
-                  <p className="text-sm text-slate-600">{activity.action}</p>
+        <div className="bg-white rounded-2xl p-6 shadow-lg border border-neutral-200">
+          <h2 className="font-display text-xl font-bold text-neutral-900 mb-6">
+            Recent Activity
+          </h2>
+          <div className="space-y-3">
+            {recentActivity.map((activity, idx) => {
+              let statusColor = 'bg-gray-100 text-gray-600'
+              if (activity.status === 'accepted') statusColor = 'bg-green-100 text-green-700'
+              if (activity.status === 'declined') statusColor = 'bg-red-100 text-red-700'
+              if (activity.status === 'pending') statusColor = 'bg-yellow-100 text-yellow-700'
+              if (activity.status === 'viewed') statusColor = 'bg-blue-100 text-blue-700'
+
+              return (
+                <div key={idx} className="flex items-center justify-between p-4 bg-neutral-50 rounded-lg hover:bg-neutral-100 transition-colors border border-neutral-200">
+                  <div>
+                    <p className="font-medium text-neutral-900">{activity.user}</p>
+                    <p className="text-sm text-neutral-600">{activity.action}</p>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <span className={`px-2 py-1 rounded text-xs font-medium ${statusColor}`}>
+                      {activity.status.charAt(0).toUpperCase() + activity.status.slice(1)}
+                    </span>
+                    <span className="text-xs text-neutral-500">{activity.time}</span>
+                  </div>
                 </div>
-                <span className="text-xs text-slate-500">{activity.time}</span>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </div>
       </main>

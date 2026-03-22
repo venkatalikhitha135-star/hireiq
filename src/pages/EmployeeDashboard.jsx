@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { LogOut, Gift, Clock, CheckCircle } from 'lucide-react'
+import { LogOut, FileText, Clock, CheckCircle, AlertCircle } from 'lucide-react'
 
 export default function EmployeeDashboard() {
   const navigate = useNavigate()
@@ -8,20 +8,87 @@ export default function EmployeeDashboard() {
     navigate('/')
   }
 
+  const offers = [
+    {
+      id: 1,
+      title: 'Senior Software Engineer',
+      company: 'Tech Corp',
+      status: 'pending',
+      daysLeft: 3,
+      salary: '$150,000 - $180,000'
+    },
+    {
+      id: 2,
+      title: 'Product Manager',
+      company: 'Innovation Labs',
+      status: 'accepted',
+      daysLeft: null,
+      salary: '$120,000 - $150,000'
+    },
+    {
+      id: 3,
+      title: 'UX Designer',
+      company: 'Creative Studios',
+      status: 'declined',
+      daysLeft: null,
+      salary: '$100,000 - $130,000'
+    },
+    {
+      id: 4,
+      title: 'Data Analyst',
+      company: 'Analytics Pro',
+      status: 'pending',
+      daysLeft: 5,
+      salary: '$90,000 - $120,000'
+    },
+  ]
+
+  const getStatusBadge = (status) => {
+    switch (status) {
+      case 'pending':
+        return (
+          <div className="flex items-center gap-2 px-3 py-1 bg-yellow-50 text-yellow-700 rounded-full text-xs font-medium">
+            <Clock className="w-3 h-3" />
+            Pending
+          </div>
+        )
+      case 'accepted':
+        return (
+          <div className="flex items-center gap-2 px-3 py-1 bg-green-50 text-green-700 rounded-full text-xs font-medium">
+            <CheckCircle className="w-3 h-3" />
+            Accepted
+          </div>
+        )
+      case 'declined':
+        return (
+          <div className="flex items-center gap-2 px-3 py-1 bg-red-50 text-red-700 rounded-full text-xs font-medium">
+            <AlertCircle className="w-3 h-3" />
+            Declined
+          </div>
+        )
+      default:
+        return null
+    }
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <div className="min-h-screen w-full">
       {/* Header */}
-      <header className="bg-white border-b border-slate-200 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex items-center justify-between">
+      <header className="bg-white border-b border-neutral-200 sticky top-0 z-10 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900">My Offers</h1>
-            <p className="text-slate-600 text-sm mt-1">View and manage your engagement offers</p>
+            <h1 className="font-display text-2xl font-bold text-neutral-900">
+              My Offers
+            </h1>
+            <p className="text-neutral-600 text-sm">
+              Review and respond to your offers
+            </p>
           </div>
           <button
             onClick={handleLogout}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 font-medium transition-colors duration-200 border border-red-200"
+            className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors font-medium"
           >
-            <LogOut className="w-4 h-4" />
+            <LogOut className="w-4 h-4" strokeWidth={1.5} />
             Logout
           </button>
         </div>
@@ -29,51 +96,58 @@ export default function EmployeeDashboard() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Summary */}
-        <div className="grid md:grid-cols-3 gap-6 mb-8">
-          {[
-            { icon: Gift, label: 'Available Offers', value: '3', color: 'from-blue-500 to-blue-600' },
-            { icon: Clock, label: 'Pending Response', value: '1', color: 'from-yellow-500 to-yellow-600' },
-            { icon: CheckCircle, label: 'Completed', value: '2', color: 'from-green-500 to-green-600' },
-          ].map((stat, idx) => {
-            const Icon = stat.icon
-            return (
-              <div key={idx} className="bg-white rounded-2xl p-6 shadow-lg border border-slate-100">
-                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center mb-4`}>
-                  <Icon className="w-6 h-6 text-white" />
-                </div>
-                <p className="text-slate-600 text-sm font-medium">{stat.label}</p>
-                <p className="text-3xl font-bold text-slate-900 mt-1">{stat.value}</p>
-              </div>
-            )
-          })}
+        {/* Summary Stats */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <div className="bg-white rounded-lg p-4 border border-neutral-200">
+            <p className="text-neutral-600 text-xs font-medium mb-1">Total Offers</p>
+            <p className="font-display text-2xl font-bold text-neutral-900">4</p>
+          </div>
+          <div className="bg-white rounded-lg p-4 border border-neutral-200">
+            <p className="text-neutral-600 text-xs font-medium mb-1">Pending</p>
+            <p className="font-display text-2xl font-bold text-yellow-600">2</p>
+          </div>
+          <div className="bg-white rounded-lg p-4 border border-neutral-200">
+            <p className="text-neutral-600 text-xs font-medium mb-1">Accepted</p>
+            <p className="font-display text-2xl font-bold text-green-600">1</p>
+          </div>
+          <div className="bg-white rounded-lg p-4 border border-neutral-200">
+            <p className="text-neutral-600 text-xs font-medium mb-1">Declined</p>
+            <p className="font-display text-2xl font-bold text-red-600">1</p>
+          </div>
         </div>
 
-        {/* Offers */}
-        <div className="grid md:grid-cols-2 gap-6">
-          {[
-            { title: 'Senior Developer Position', department: 'Engineering', status: 'pending', salary: '$95K - $120K' },
-            { title: 'Project Manager Role', department: 'Product', status: 'pending', salary: '$85K - $105K' },
-            { title: 'Marketing Specialist', department: 'Marketing', status: 'completed', salary: '$65K - $80K' },
-          ].map((offer, idx) => (
-            <div key={idx} className="bg-white rounded-2xl p-6 shadow-lg border border-slate-100 hover:shadow-xl transition-shadow">
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <h3 className="text-lg font-bold text-slate-900">{offer.title}</h3>
-                  <p className="text-sm text-slate-600">{offer.department}</p>
+        {/* Offers List */}
+        <div className="space-y-4">
+          {offers.map((offer) => (
+            <div key={offer.id} className="bg-white rounded-2xl p-6 shadow-lg border border-neutral-200 hover:shadow-xl transition-shadow">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div className="flex-1">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <FileText className="w-6 h-6 text-primary-600" strokeWidth={1.5} />
+                    </div>
+                    <div>
+                      <h3 className="font-display text-lg font-bold text-neutral-900 mb-1">
+                        {offer.title}
+                      </h3>
+                      <p className="text-neutral-600 text-sm mb-2">
+                        {offer.company}
+                      </p>
+                      <p className="text-primary-600 font-medium text-sm">
+                        {offer.salary}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                  offer.status === 'completed' 
-                    ? 'bg-green-100 text-green-700' 
-                    : 'bg-yellow-100 text-yellow-700'
-                }`}>
-                  {offer.status === 'completed' ? 'Completed' : 'Pending'}
-                </span>
+                <div className="flex items-center gap-4 md:flex-col md:items-end">
+                  {getStatusBadge(offer.status)}
+                  {offer.daysLeft && (
+                    <p className="text-neutral-600 text-xs font-medium">
+                      {offer.daysLeft} days left
+                    </p>
+                  )}
+                </div>
               </div>
-              <p className="text-2xl font-bold text-slate-900 mb-4">{offer.salary}</p>
-              <button className="w-full py-2 px-4 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-600 font-medium transition-colors">
-                View Details
-              </button>
             </div>
           ))}
         </div>
