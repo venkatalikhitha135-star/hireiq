@@ -5,41 +5,36 @@
 
 import express from 'express'
 import cors from 'cors'
-import { buildEmailHtml } from './src/lib/resend.js'
 import * as dotenv from 'dotenv'
 
 dotenv.config()
-console.log("KEY:", process.env.RESEND_API_KEY);
 
 const app = express()
 app.use(cors())
 app.use(express.json())
 
-app.post('/api/send-invite', async (req, res) => {
-  const { toName, toEmail, position, voiceBotLink, fromName } = req.body
+// Email sending endpoint
+app.post('/api/send-email', async (req, res) => {
+  const { to, subject, html } = req.body
 
-  if (!toEmail || !voiceBotLink) {
-    return res.status(400).json({ error: 'toEmail and voiceBotLink are required' })
+  if (!to || !subject || !html) {
+    return res.status(400).json({ error: 'to, subject, and html are required' })
   }
 
   const apiKey = process.env.RESEND_API_KEY || process.env.VITE_RESEND_API_KEY
 
-  const ALLOWED_TEST_EMAIL = "venkatalikhitha135@gmail.com"
-
-if (!apiKey || toEmail !== ALLOWED_TEST_EMAIL) {
-  console.log(`
+  // Demo mode for testing without API key
+  if (!apiKey) {
+    console.log(`
 📨 [DEMO MODE]
-To      : ${toEmail}
-Name    : ${toName}
-Position: ${position}
-Link    : ${voiceBotLink}
-  `)
-
-  return res.json({
-    id: 'demo_' + Date.now(),
-    message: 'Demo mode — email simulated'
-  })
-}
+To      : ${to}
+Subject : ${subject}
+    `)
+    return res.json({
+      id: 'demo_' + Date.now(),
+      message: 'Demo mode — email simulated',
+    })
+  }
 
   try {
     const response = await fetch('https://api.resend.com/emails', {
@@ -49,29 +44,26 @@ Link    : ${voiceBotLink}
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: `${process.env.FROM_NAME || 'HireIQ HR'} <${process.env.FROM_EMAIL || 'onboarding@resend.dev'}>`,
-        to: [toEmail.trim()],
-        subject: `${toName}, your voice assessment is ready — ${position || 'offer follow-up'}`,
-        html: buildEmailHtml({ toName, position, voiceBotLink, fromName }),
+        from: process.env.FROM_EMAIL || 'onboarding@resend.dev',
+        to: [to.trim()],
+        subject,
+        html,
       }),
     })
 
     const data = await response.json()
 
     if (!response.ok) {
-      console.log("❌ RESEND ERROR:", data)   // 👈 shows real reason
+      console.log('❌ RESEND ERROR:', data)
       return res.status(response.status).json(data)
     }
 
-    console.log("✅ Email sent to:", toEmail)
+    console.log('✅ Email sent to:', to)
     return res.json({ id: data.id, message: 'Sent!' })
-
   } catch (err) {
-    console.log("SERVER ERROR:", err.message)
+    console.log('SERVER ERROR:', err.message)
     return res.status(500).json({ error: err.message })
   }
 })
 
-app.listen(3001, () =>
-  console.log('📧 API server running at http://localhost:3001')
-)
+app.listen(3001, () => console.log('📧 API server running at http://localhost:3001'))
