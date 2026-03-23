@@ -1,4 +1,6 @@
 import { useState, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 import {
   parseCandidateCSV,
   saveCandidates,
@@ -11,6 +13,13 @@ import CandidateTable from '../components/CandidateTable'
 import CandidateForm from '../components/CandidateForm'
 
 export default function Dashboard() {
+  const navigate = useNavigate()
+  const { user, logout } = useAuth()
+
+  const handleLogout = () => {
+    logout()
+    navigate('/login')
+  }
   const [candidates, setCandidates] = useState(() => getCandidates())
   const [showForm, setShowForm] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -98,25 +107,54 @@ export default function Dashboard() {
         }}
       >
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-md)' }}>
-            <div
-              style={{
-                width: '40px',
-                height: '40px',
-                backgroundColor: 'var(--color-accent)',
-                borderRadius: 'var(--radius-lg)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '24px',
-                fontWeight: '700',
-              }}
-            >
-              H
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--spacing-md)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-md)' }}>
+              <div
+                style={{
+                  width: '40px',
+                  height: '40px',
+                  backgroundColor: 'var(--color-accent)',
+                  borderRadius: 'var(--radius-lg)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '24px',
+                  fontWeight: '700',
+                }}
+              >
+                H
+              </div>
+              <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '700' }}>HireIQ</h1>
             </div>
-            <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '700' }}>HireIQ</h1>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-lg)', fontSize: '14px' }}>
+              <span style={{ opacity: 0.9 }}>
+                <strong>{user?.email}</strong> ({user?.role === 'hr' ? 'HR' : 'Employee'})
+              </span>
+              <button
+                onClick={handleLogout}
+                style={{
+                  padding: '6px 16px',
+                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                  color: 'var(--color-neutral-0)',
+                  border: '1px solid rgba(255, 255, 255, 0.3)',
+                  borderRadius: 'var(--radius-md)',
+                  fontSize: '13px',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.3)'
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.2)'
+                }}
+              >
+                Logout
+              </button>
+            </div>
           </div>
-          <p style={{ margin: 'var(--spacing-md) 0 0 0', opacity: 0.9 }}>
+          <p style={{ margin: 0, opacity: 0.9 }}>
             Voice Assessment Platform for Candidate Evaluation
           </p>
         </div>
